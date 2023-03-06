@@ -83,7 +83,7 @@ Below are the outputs of the project's web application, which allows emergency w
 
 
 
-![app2](https://user-images.githubusercontent.com/54407746/98724932-5bf35780-238c-11eb-8a93-ebb09ab2d510.JPG)
+![app2](https://github.com/Mehranmzn/DataScience-Nanodegree/blob/master/notebooks/Project%202/app/98724932-5bf35780-238c-11eb-8a93-ebb09ab2d510.JPG)
 
 
 ### Instructions of How to Interact With Project:

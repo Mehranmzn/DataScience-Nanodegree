@@ -10,11 +10,10 @@
 ## Installations
  - NumPy
  - Pandas
- - Seaborn
  - Matplotlib
- - Wordcloud
- - Pillow
+ - Seaborn
  - Pickle
+ - nltk
  
 No additional installations beyond the Anaconda distribution of Python and Jupyter notebooks.
 
@@ -27,10 +26,11 @@ For this project I was interested in analysing the interactions that users have 
 
 ## File Descriptions
 
-data    
+`data`
+Containes `.csv` files of raw data.     
 
-|- articles_community.csv # articles     
-|- user-item-interactions.csv # user item interactions data  
+`|- articles_community.csv` # articles     
+`|- user-item-interactions.csv` # user item interactions data  
 
 
 Recommendations_with_IBM.ipynb # Jupyter notebook     

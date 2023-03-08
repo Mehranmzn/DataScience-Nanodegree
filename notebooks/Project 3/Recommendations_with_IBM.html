@@ -37,9 +37,8 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "[nltk_data] Downloading package stopwords to\n",
-      "[nltk_data]     /Users/Moaze002/nltk_data...\n",
-      "[nltk_data]   Package stopwords is already up-to-date!\n"
+      "[nltk_data] Error loading stopwords: <urlopen error [Errno 8] nodename\n",
+      "[nltk_data]     nor servname provided, or not known>\n"
      ]
     },
     {
@@ -865,7 +864,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 169,
+   "execution_count": 17,
    "metadata": {},
    "outputs": [
     {
@@ -874,7 +873,7 @@
        "937"
       ]
      },
-     "execution_count": 169,
+     "execution_count": 17,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -885,7 +884,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 170,
+   "execution_count": 18,
    "metadata": {
     "tags": []
    },
@@ -897,7 +896,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 23,
+   "execution_count": 19,
    "metadata": {
     "tags": []
    },
@@ -972,7 +971,7 @@
        "4      1276.0          deploy your python model as a restful api        5"
       ]
      },
-     "execution_count": 23,
+     "execution_count": 19,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -1004,7 +1003,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 172,
+   "execution_count": 20,
    "metadata": {
     "tags": []
    },
@@ -1158,7 +1157,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 25,
+   "execution_count": 21,
    "metadata": {
     "tags": []
    },
@@ -1220,7 +1219,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 26,
+   "execution_count": 22,
    "metadata": {
     "tags": []
    },
@@ -1243,15 +1242,16 @@
     "    \n",
     "    '''\n",
     "    # compute similarity of each user to the provided user\n",
-    "    user_row = user_item.loc[user_id]\n",
-    "\n",
-    "    dot_prod_users = user_item.loc[user_item.index.isin(user_row[user_row > 0].index)].dot(user_row)\n",
-    "\n",
-    "\n",
+    "    dot_prod_users = user_item.dot(np.transpose(user_item))\n",
+    "    \n",
     "    # sort by similarity\n",
-    "    sim_users = dot_prod_users.sort_values(ascending=False)\n",
-    "\n",
+    "    sim_users = dot_prod_users[user_id].sort_values(ascending = False)\n",
+    "    \n",
+    "    # create list of just the ids\n",
     "    most_similar_users = sim_users.index.tolist()\n",
+    "    \n",
+    "    # remove the own user's id\n",
+    "    most_similar_users.remove(user_id)\n",
     "    \n",
     "       \n",
     "    return most_similar_users # return a list of the users in order from most to least similar\n",
@@ -1260,7 +1260,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 212,
+   "execution_count": 23,
    "metadata": {
     "tags": []
    },
@@ -1269,9 +1269,9 @@
      "name": "stdout",
      "output_type": "stream",
      "text": [
-      "The 10 most similar users to user 1 are: [268, 668, 346, 310, 585, 1427, 43, 151, 329, 494]\n",
-      "The 5 most similar users to user 3933 are: [268, 668, 310, 346, 585]\n",
-      "The 3 most similar users to user 46 are: [184, 295, 1162]\n"
+      "The 10 most similar users to user 1 are: [3933, 23, 3782, 203, 4459, 3870, 131, 4201, 46, 5041]\n",
+      "The 5 most similar users to user 3933 are: [1, 23, 3782, 203, 4459]\n",
+      "The 3 most similar users to user 46 are: [4201, 3782, 23]\n"
      ]
     }
    ],
@@ -2219,7 +2219,7 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "**Provide your response here.**"
+    "Funk SVD comes into play when dealing with real-life datasets for recommendation engines, which are often very sparse due to the absence of ratings or scores for most items. While SVD can produce excellent results on non-sparse data without missing values, it may not be as effective in such situations. Sparse user-item matrices with over 95% NaN values are common, making Funk SVD an ideal solution."
    ]
   },
   {
@@ -2575,7 +2575,14 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "Based on the results, increasing the number of latent features leads to higher accuracy for the training data but decreases the accuracy for the test data, indicating overfitting. Therefore, it is recommended to keep the number of latent features relatively low. However, it should be noted that this recommendation engine can only make recommendations for the limited number of users in the training and test datasets, and the high accuracy for the test data could be due to the sparsity of the matrix"
+    "The results indicate that increasing the number of latent features leads to higher accuracy for the training data, but lower accuracy for the test data, which suggests overfitting. Therefore, it's advisable to keep the number of latent features relatively low. It's worth noting that due to the sparsity of the matrix and the limited number of users in both datasets, the SVD can only make recommendations for these users, explaining the high accuracy of the test data. However, if more users appeared in both datasets, it would be interesting to examine the results. The accuracy of the test data begins to decline at around 100 features, which is a good number to use, as increasing beyond this point improves training accuracy but reduces testing accuracy. To evaluate the effectiveness of our recommendation engine, we could conduct an A/B test for new users to address the cold start problem. We could recommend articles to one group using our engine and popular articles to another group, then compare click-through rates to determine if our engine leads to more clicks. If the results show a significant increase in clicks, we could conclude that our engine is effective and deploy it."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The cold start problem arises with the use of SVD, as we can only make predictions for articles and users that exist in both the training and test sets. Consequently, we are unable to recommend articles to users in the test dataset that are not in the training set. To enhance our recommendation engine for new users, we could adopt a combination of knowledge-based, collaborative filtering-based, and content-based recommendations. Additionally, conducting an A/B test would enable us to determine the most effective recommendation technique to employ."
    ]
   },
   {
